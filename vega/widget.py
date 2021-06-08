@@ -195,7 +195,7 @@ class VegaWidget(DOMWidget):
         update['insert'] = "@dataframe"
         self.send(dict(type="update", updates=[update]))
 
-    def update_histogram2d(self, arr, columns, remove=None):
+    def update_histogram2d(self, arr, columns, remove=None, chunksize=None):
         """
         """
         self._df = arr
@@ -204,4 +204,10 @@ class VegaWidget(DOMWidget):
         if remove is not None:
             update['remove'] = remove
         update['insert'] = "@histogram2d"
+        if chunksize is not None:
+            step = chunksize//arr.shape[1]
+            l0 = list(range(0,arr.shape[0], step))
+            l1 = l0[1:] + [arr.shape[0]]
+            chunks = list(zip(l0, l1))
+            update['chunks'] = chunks
         self.send(dict(type="update", updates=[update]))
