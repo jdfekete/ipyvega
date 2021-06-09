@@ -2,7 +2,30 @@ import { DOMWidgetView, DOMWidgetModel } from "@jupyter-widgets/base";
 import { vegaEmbed } from "./index";
 import { Result } from "vega-embed";
 import * as ndarray from "ndarray";
-//import * as ndarray_unpack from "ndarray-unpack";
+import * as ndarray_unpack from "ndarray-unpack";
+
+import Histogram2DWorker from "worker-loader!./worker";
+
+
+var vegaWidget_ = null as any;
+
+const worker = new Histogram2DWorker();
+
+
+worker.onmessage = async (event: any) => {
+    const filter = new Function(
+        "datum",
+        "return (" + (event.data.remove || "false") + ")"
+      );
+    const result =  vegaWidget_.result;
+    const changeSet = result.view
+        .changeset()
+	.remove(filter)
+        .insert(event.data.values);
+    await result.view.change("data", changeSet).runAsync();
+};
+
+
 import {
   data_union_serialization,
   listenToUnion,
@@ -95,7 +118,14 @@ export class VegaWidget extends DOMWidgetView {
       if (newValues == "@dataframe") {
 	 newValues = this.updateDataFrame();
       } else if (newValues == "@histogram2d") {
-	 newValues = this.updateHistogram2D();
+	 //newValues = this.updateHistogram2D();
+	 vegaWidget_ = this;
+	 const df = this.model.get("_df");
+	 const arr = ndarray_unpack(df);
+	 const cols = this.model.get("_columns");
+	 worker.postMessage({ arr: arr,
+	                cols: cols, shape: df.shape, remove: update.remove });
+	 return;
       }
       const changeSet = result.view
         .changeset()

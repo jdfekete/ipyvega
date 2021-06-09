@@ -8,7 +8,11 @@ const commonConfig = {
       {
         test: /\.tsx?$/,
         loader: "ts-loader"
-      }
+      },
+     {
+        test: /\.worker\.js$/,
+        use: { loader: "worker-loader" },
+      }	
     ]
   }
 };
@@ -20,7 +24,8 @@ module.exports = [
   // the main vega extension
   Object.assign({}, commonConfig, {
     entry: "./src/index.ts",
-    output: {
+      output: {
+      publicPath: "/nbextensions/jupyter-vega/",
       filename: "index.js",
       library: "nbextensions/jupyter-vega/index",
       path: outputPath,
@@ -30,7 +35,8 @@ module.exports = [
   // the widget extension
   Object.assign({}, commonConfig, {
     entry: "./src/widget.ts",
-    output: {
+      output: {
+	  publicPath: "/nbextensions/jupyter-vega/",
       filename: "widget.js",
       path: outputPath,
       libraryTarget: outputLibraryTarget
