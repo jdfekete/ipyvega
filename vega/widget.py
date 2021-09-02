@@ -13,7 +13,7 @@ from ipytablewidgets import (serialization,
 import numpy as np
 try:
     import ipywidgets as widgets
-    from traitlets import Unicode
+    from traitlets import Unicode, Any
 
 except ImportError as err:
     new_err = ImportError(
@@ -76,6 +76,7 @@ class VegaWidget(widgets.DOMWidget):
     _model_module_version = Unicode(EXTENSION_SPEC_VERSION).tag(sync=True)
     _spec_source = Unicode('null').tag(sync=True)
     _opt_source = Unicode('null').tag(sync=True)
+    rec_time = Any([]).tag(sync=True)
     compression = None
     _df = TableType(None).tag(sync=True, **serialization)
 

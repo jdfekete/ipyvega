@@ -28,11 +28,16 @@ function checkWidgetUpdate(ev: any): WidgetUpdateMessage | null {
 export class VegaWidgetModel extends DOMWidgetModel {
   defaults() {
         return {...DOMWidgetModel.prototype.defaults(),
-            _model_name: "VegaWidgetModule",
+            _model_name: "VegaWidgetModel",
             _view_name: "VegaWidget",
+	    _model_module: 'jupyter-vega',
+      	    _view_module: 'jupyter-vega',
+      	    _model_module_version: '3.5.0',
+      	    _view_module_version: '3.5.0',
             _spec_source: "",
             _opt_source: "",
             _df:  ndarray([]),
+	    rec_time: [],
             _columns: []
             }
    };
@@ -106,7 +111,6 @@ export class VegaWidget extends DOMWidgetView {
         await applyUpdate(update);
       }
     };
-
     this.model.on("change:_spec_source", reembed);
     this.model.on("change:_opt_source", reembed);
     this.model.on("msg:custom", (ev: any) => {
@@ -119,6 +123,8 @@ export class VegaWidget extends DOMWidgetView {
         this.errorElement.textContent = String(err);
         console.error(err);
       });
+      this.model.set('rec_time', Date.now());
+      this.touch();
     });
 
     // initial rendering
@@ -169,5 +175,6 @@ export class VegaWidget extends DOMWidgetView {
     }
     return res;
   };
+  
 }
 
