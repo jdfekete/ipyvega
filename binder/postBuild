@@ -1,0 +1,9 @@
+set -ex
+git submodule update --init --recursive
+poetry install
+pip install -e ipytablewidgets
+npm install
+npm run build
+jupyter nbextension install --py --symlink --sys-prefix ipyvega
+jupyter nbextension enable --py --sys-prefix ipyvega
+
