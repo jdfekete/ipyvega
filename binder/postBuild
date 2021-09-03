@@ -1,5 +1,7 @@
 set -ex
+conda info
 git submodule update --init --recursive
+poetry env use /srv/conda/envs/notebook/bin/python
 poetry install
 pip install -e ipytablewidgets
 npm install
