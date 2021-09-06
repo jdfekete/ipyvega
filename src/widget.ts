@@ -49,6 +49,7 @@ export class VegaWidgetModel extends DOMWidgetModel {
 }
 
 var transf_time: any = null;
+var conv_time: any = null;
 
 export class VegaWidget extends DOMWidgetView {
   result?: Result;
@@ -95,20 +96,25 @@ export class VegaWidget extends DOMWidgetView {
       );
       let newValues = update.insert || [];
       transf_time = Date.now();
+      conv_time = transf_time;
       if (newValues == "@dataframe") {
          // console.log("@dataframe");
          newValues = this.updateDataFrame();
+	 conv_time = Date.now();
       } else if (newValues == "@array2d") {
          newValues = this.updateArray2D();
+	 conv_time = Date.now();
       }
-      this.model.set('rec_time', [transf_time, Date.now()]);
-      this.touch();
+      
       const changeSet = result.view
         .changeset()
         .remove(filter)
         .insert(newValues);
 
       await result.view.change(update.key, changeSet).runAsync();
+      this.model.set('rec_time', [transf_time, conv_time, Date.now()]);
+      this.touch();
+
     };
 
     const applyUpdates = async (message: WidgetUpdateMessage) => {
