@@ -48,6 +48,8 @@ export class VegaWidgetModel extends DOMWidgetModel {
 
 }
 
+var transf_time: any = null;
+
 export class VegaWidget extends DOMWidgetView {
   result?: Result;
   viewElement = document.createElement("div");
@@ -92,12 +94,15 @@ export class VegaWidget extends DOMWidgetView {
         "return (" + (update.remove || "false") + ")"
       );
       let newValues = update.insert || [];
+      transf_time = Date.now();
       if (newValues == "@dataframe") {
          // console.log("@dataframe");
          newValues = this.updateDataFrame();
       } else if (newValues == "@array2d") {
          newValues = this.updateArray2D();
       }
+      this.model.set('rec_time', [transf_time, Date.now()]);
+      this.touch();
       const changeSet = result.view
         .changeset()
         .remove(filter)
@@ -123,8 +128,6 @@ export class VegaWidget extends DOMWidgetView {
         this.errorElement.textContent = String(err);
         console.error(err);
       });
-      this.model.set('rec_time', Date.now());
-      this.touch();
     });
 
     // initial rendering
@@ -133,6 +136,7 @@ export class VegaWidget extends DOMWidgetView {
 
   updateDataFrame(): any[] {
     let table = this.model.get("_df");
+    transf_time = Date.now();
     // console.log("table", table);
     const proxy = rowProxy(table);
     const rows = Array(table.size);
@@ -158,6 +162,7 @@ export class VegaWidget extends DOMWidgetView {
   updateArray2D(): any[] {
     // console.log("updateArray2D");
     let table = this.model.get("_df");
+    transf_time = Date.now();
     let res = Array(table.size*table.size);
     let fancyCol = table.columns[0];
     let arr: ndarray.NdArray = table.data[fancyCol];
