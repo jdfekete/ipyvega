@@ -8,7 +8,7 @@ package_data = \
 {'': ['*'], 'vega': ['static/*']}
 
 install_requires = \
-['ipytablewidgets>=0.1.1']
+['jupyter>=1.0.0,<2.0.0', 'ipytablewidgets>=0.1.1']
 
 entry_points = \
 {'altair.vega.v5.renderer': ['notebook = vega.vega:entry_point_renderer'],
