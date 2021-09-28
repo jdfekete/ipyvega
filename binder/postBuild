@@ -1,6 +1,6 @@
 set -ex
 conda info
-git submodule update --init --recursive
+#git submodule update --init --recursive
 #poetry env use /srv/conda/bin/python
 poetry config virtualenvs.create false
 poetry install
