@@ -10,5 +10,5 @@ npm install
 npm run build
 jupyter nbextension install --py --symlink --sys-prefix vega
 jupyter nbextension enable --py --sys-prefix vega
-
+jupyter labextension install .
 #https://mybinder.org/v2/gh/jdfekete/ipyvega.git/bench
