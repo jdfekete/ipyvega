@@ -10,3 +10,8 @@ dependencies:
   - pkgconfig
   - pip
   - poetry
+  - jupyter>=1.0.0
+  - pandas>=1.0.0
+  - pip:
+    - ipytablewidgets>=0.1.1
+    - altair>=4.0.1
