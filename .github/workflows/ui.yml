@@ -30,6 +30,7 @@ jobs:
         source /usr/share/miniconda/etc/profile.d/conda.sh
         conda activate ipyvega
         conda install jupyterlab=3.0.11 -c conda-forge # required 4 galata
+	poetry config virtualenvs.create false
         poetry install
         yarn install
         yarn run build
@@ -44,4 +45,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: cell-artifact
-        path: ui-tests/reference-output/test/screenshots/vega_cell_*.png
+        path: ui-tests/test-output/test/screenshots/vega_cell_*.png
