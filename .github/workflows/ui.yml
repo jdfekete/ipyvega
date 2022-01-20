@@ -49,9 +49,9 @@ jobs:
         yarn run build
         which python
         python --version
-	python -c 'import traitlets'
-	python -c 'import traitlets.utils'
-	python -c 'import traitlets.utils.descriptions'	
+        python -c 'import traitlets'
+        python -c 'import traitlets.utils'
+        python -c 'import traitlets.utils.descriptions'	
         python -c 'from traitlets.utils.descriptions import describe'
         jupyter labextension install .
         cd ui-tests/
