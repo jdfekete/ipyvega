@@ -42,7 +42,8 @@ jobs:
         conda install poetry -c conda-forge -y	
         poetry install
         conda install nodejs=14 -c conda-forge # downgraded to avoid ERR_OSSL_EVP_UNSUPPORTED
-        conda install jupyterlab=3.0.1 -c conda-forge # required 4 galata
+        conda install jupyterlab=3.0.1 -c conda-forge -y # required 4 galata
+	conda install traitlets=5.1.1 -c conda-forge -y --force-reinstall
         conda install yarn -c conda-forge -y
         yarn install
         yarn run build
