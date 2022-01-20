@@ -39,12 +39,11 @@ jobs:
         source /usr/share/miniconda/etc/profile.d/conda.sh
         conda activate ipyvega
         python -c 'import ipytablewidgets'
+        conda install poetry -c conda-forge -y	
+        poetry install
         conda install nodejs=14 -c conda-forge # downgraded to avoid ERR_OSSL_EVP_UNSUPPORTED
         conda install jupyterlab=3.0.1 -c conda-forge # required 4 galata
-        conda install poetry -c conda-forge -y
         conda install yarn -c conda-forge -y
-        conda install traitlets -c conda-forge -y	
-        poetry install
         yarn install
         yarn run build
         which python
