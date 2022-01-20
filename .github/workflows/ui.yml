@@ -48,10 +48,15 @@ jobs:
         yarn run build
         which python
         python --version
+        echo 'import traitlets'
         python -c 'import traitlets'
+        echo 'import traitlets.utils'
         python -c 'import traitlets.utils'
-        python -c 'import traitlets.utils.descriptions'	
+        echo 'import traitlets.utils.descriptions'
+        python -c 'import traitlets.utils.descriptions'
+        echo 'from traitlets.utils.descriptions import describe'
         python -c 'from traitlets.utils.descriptions import describe'
+        echo 'jupyter labextension install .'
         jupyter labextension install .
         cd ui-tests/
         jupyter trust tests/notebooks/NBTest.ipynb	
