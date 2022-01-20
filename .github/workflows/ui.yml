@@ -50,4 +50,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: cell-artifact
-        path: ui-tests/test-output/test/screenshots/vega_cell_*.png
+        path: ui-tests/reference-output/test/screenshots/vega_cell_*.png
