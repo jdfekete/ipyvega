@@ -2,6 +2,7 @@ set -ex
 conda info
 poetry config virtualenvs.create false
 poetry install
+conda install yarn -c conda-forge -y
 yarn install
 yarn run build
 jupyter nbextension install --py --symlink --sys-prefix vega
