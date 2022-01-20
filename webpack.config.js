@@ -21,7 +21,7 @@ module.exports = [
   Object.assign({}, commonConfig, {
     entry: "./src/extension.ts",
     output: {
-      hashFunction: "xxhash64",
+      hashFunction: "sha256",
       filename: "extension.js",
       path: outputPath,
       libraryTarget: outputLibraryTarget
@@ -31,7 +31,7 @@ module.exports = [
   Object.assign({}, commonConfig, {
     entry: "./src/index.ts",
     output: {
-      hashFunction: "xxhash64",
+      hashFunction: "sha256",
       filename: "index.js",
       path: outputPath,
       libraryTarget: outputLibraryTarget
@@ -41,7 +41,7 @@ module.exports = [
   Object.assign({}, commonConfig, {
     entry: "./src/labplugin.ts",
     output: {
-      hashFunction: "xxhash64",
+      hashFunction: "sha256",
       filename: "labplugin.js",
       path: outputPath,
       libraryTarget: outputLibraryTarget
