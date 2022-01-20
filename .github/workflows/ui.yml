@@ -46,6 +46,9 @@ jobs:
         poetry install
         yarn install
         yarn run build
+        which python
+        python --version
+        python -c 'from traitlets.utils.descriptions import describe'
         jupyter labextension install .
         cd ui-tests/
         jupyter trust tests/notebooks/NBTest.ipynb	
