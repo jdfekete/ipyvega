@@ -54,6 +54,7 @@ jobs:
         python -c 'import traitlets.utils'
         echo 'import traitlets.utils.descriptions'
         python -c 'import traitlets.utils.descriptions'
+        python -c 'import traitlets; print("traitlets version", traitlets.__version__)'
         echo 'from traitlets.utils.descriptions import describe'
         python -c 'from traitlets.utils.descriptions import describe'
         echo 'jupyter labextension install .'
