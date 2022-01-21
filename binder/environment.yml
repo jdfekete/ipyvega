@@ -10,6 +10,3 @@ dependencies:
   - yarn
   - pip
   - poetry>=0.12
-  - pip:
-    - ipytablewidgets>=0.1.1
-    - altair>=4.0.1
