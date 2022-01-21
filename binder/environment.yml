@@ -8,5 +8,4 @@ dependencies:
   - python=3.9
   - nodejs=14 # downgraded to avoid ERR_OSSL_EVP_UNSUPPORTED
   - yarn
-  - pip
   - poetry>=0.12
