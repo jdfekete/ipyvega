@@ -88,7 +88,7 @@ export class VegaWidget extends DOMWidgetView {
         "return (" + (update.remove || "false") + ")"
       );
       let newValues = update.insert || [];
-      if(newValues.length == 1){
+      if (newValues.length == 1) {
         if (newValues[0] == "@dataframe") {
           newValues = this.updateDataFrame();
         } else if (newValues[0] == "@array2d") {
