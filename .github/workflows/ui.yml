@@ -49,6 +49,7 @@ jobs:
           yarn install
           yarn run build
           poetry run jupyter labextension install .
+          export PATH="$(poetry env info -p)/bin:$PATH"
           cd ui-tests/
           yarn
           yarn run start-jlab:detached
