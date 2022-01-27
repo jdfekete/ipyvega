@@ -39,9 +39,8 @@ jobs:
 
       - name: Install Python dependencies
         run: poetry install
-
       - run: poetry install --extras "jupyterlab"
-      - run: poetry run jupyter labextension install .
+
       - name: Setup Node
         uses: actions/setup-node@v2.5.1
 
@@ -49,6 +48,7 @@ jobs:
         run: |
           yarn install
           yarn run build
+          poetry run jupyter labextension install .
           cd ui-tests/
           yarn
           yarn run start-jlab:detached
