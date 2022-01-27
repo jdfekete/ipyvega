@@ -24,7 +24,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-    
       - name: Set up Python ${{ matrix.python }}
         uses: actions/setup-python@v2.3.1
         with:
@@ -47,16 +46,16 @@ jobs:
         uses: actions/setup-node@v2.5.1
 
       - name: Run tests
-      run: |
-        yarn install
-        yarn run build
-        cd ui-tests/
-        yarn
-        yarn run start-jlab:detached
-        yarn run test
-    - name: Upload output file
-      if: failure()
-      uses: actions/upload-artifact@v2
-      with:
-        name: cell-artifact
-        path: ui-tests/test-output/test/screenshots/vega_cell_*.png
+        run: |
+          yarn install
+          yarn run build
+          cd ui-tests/
+          yarn
+          yarn run start-jlab:detached
+          yarn run test
+      - name: Upload output file
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: cell-artifact
+          path: ui-tests/test-output/test/screenshots/vega_cell_*.png
