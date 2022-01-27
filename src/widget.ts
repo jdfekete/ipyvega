@@ -7,7 +7,7 @@ import { table_serialization, rowProxy, IDict } from "jupyter-tablewidgets";
 interface WidgetUpdate {
   key: string;
   remove?: string;
-  insert?: any[] | string;
+  insert?: any[];
 }
 
 interface WidgetUpdateMessage {
@@ -88,9 +88,9 @@ export class VegaWidget extends DOMWidgetView {
         "return (" + (update.remove || "false") + ")"
       );
       let newValues = update.insert || [];
-      if (newValues == "@dataframe") {
+      if (newValues == ["@dataframe"]) {
         newValues = this.updateDataFrame();
-      } else if (newValues == "@array2d") {
+      } else if (newValues == ["@array2d"]) {
         newValues = this.updateArray2D();
       }
       const changeSet = result.view
