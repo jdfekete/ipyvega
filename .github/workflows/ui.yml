@@ -40,8 +40,8 @@ jobs:
       - name: Install Python dependencies
         run: poetry install
 
-      - run: poetry run jupyter labextension install .
       - run: poetry install --extras "jupyterlab"
+      - run: poetry run jupyter labextension install .
       - name: Setup Node
         uses: actions/setup-node@v2.5.1
 
