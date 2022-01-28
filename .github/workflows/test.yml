@@ -31,7 +31,7 @@ jobs:
       - name: Install Python dependencies
         run: poetry install
 
-      - run: poetry run jupyter nbextension install vega --py --sys-prefix
+
 
       - name: Setup Node
         uses: actions/setup-node@v1
