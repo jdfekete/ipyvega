@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - laberror
   pull_request:
     branches:
       - master
