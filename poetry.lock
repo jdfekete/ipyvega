@@ -289,11 +289,11 @@ test = ["pytest (!=5.3.4)", "pytest-cov", "flaky", "ipyparallel"]
 
 [[package]]
 name = "ipytablewidgets"
-version = "0.2.4"
+version = "0.2.3"
 description = "A set of widgets to help facilitate reuse of large tables across widgets"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.8"
 
 [package.dependencies]
 ipywidgets = ">=7.5.0,<8"
@@ -1278,7 +1278,7 @@ widget = []
 [metadata]
 lock-version = "1.1"
 python-versions = ">= 3.8"
-content-hash = "94f9b9c935d6a189874ef6f8548d2cacf1619a961e8044b32ba98cd5d5c5da70"
+content-hash = "108770a94b30fd1b0872031b8e213e0b50722d2b3a66abb60b5eedad987c4cae"
 
 [metadata.files]
 altair = [
@@ -1468,8 +1468,8 @@ ipykernel = [
     {file = "ipykernel-6.9.2.tar.gz", hash = "sha256:4c3cc8cb359f2ead70c30f5504971c0d285e2c1c699d2ce9af0216fe9c9fb17c"},
 ]
 ipytablewidgets = [
-    {file = "ipytablewidgets-0.2.4-py2.py3-none-any.whl", hash = "sha256:bef2c20d8b5227b05226d98a2cab37f9a78b51f196c730ed6e9c0614189ad0fd"},
-    {file = "ipytablewidgets-0.2.4.tar.gz", hash = "sha256:a28bae84e1daa7b1a50b21f7b582b7dd50c2c8e1d871ad80b3d810c3a27ac67a"},
+    {file = "ipytablewidgets-0.2.3-py2.py3-none-any.whl", hash = "sha256:8a38ec069250b7e55d819a087c572a66e8554688d581fb4b27d19ce8ecbaf8df"},
+    {file = "ipytablewidgets-0.2.3.tar.gz", hash = "sha256:815646a81ea8b47eb28b37aa83415e718609d2f0e617b21b61a2513f85c6a76b"},
 ]
 ipython = [
     {file = "ipython-8.1.1-py3-none-any.whl", hash = "sha256:6f56bfaeaa3247aa3b9cd3b8cbab3a9c0abf7428392f97b21902d12b2f42a381"},
