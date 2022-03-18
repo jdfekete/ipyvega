@@ -1278,7 +1278,7 @@ widget = []
 [metadata]
 lock-version = "1.1"
 python-versions = ">= 3.8"
-content-hash = "ae4778bc105e2a70fc4e130c65f5e775ef0c0f027a6f019d404dd63905d4e319"
+content-hash = "94f9b9c935d6a189874ef6f8548d2cacf1619a961e8044b32ba98cd5d5c5da70"
 
 [metadata.files]
 altair = [

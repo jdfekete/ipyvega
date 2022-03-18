@@ -1947,7 +1947,7 @@ junk@^3.1.0:
   resolved "https://registry.yarnpkg.com/junk/-/junk-3.1.0.tgz#31499098d902b7e98c5d9b9c80f43457a88abfa1"
   integrity sha512-pBxcB3LFc8QVgdggvZWyeys+hnrNWg4OcZIU/1X59k5jQdLBlCsYGRQaz234SqoRLTCgMH00fY0xRJH+F9METQ==
 
-jupyter-tablewidgets@^0.2.4:
+jupyter-tablewidgets@^0.2.3:
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/jupyter-tablewidgets/-/jupyter-tablewidgets-0.2.4.tgz#94481f3c9355de93d524d75a1b3f61bf88f97238"
   integrity sha512-DtPBP6mcarWUotfpuuRHZ9p/Sv9yiNb/Posdxu26prjFHbGcoPf/921dowFiiKpbbNxh3jL4zPmMvUyEzc1D6Q==
