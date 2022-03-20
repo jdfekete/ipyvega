@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - laberr2
   pull_request:
     branches:
       - master
