@@ -17,6 +17,38 @@ interface WidgetUpdateMessage {
   resize: boolean;
 }
 
+// required because JSON.stringify don't work well with proxy objects returned by rowProxy
+function rowToDict(row: any): any {
+  let d: any = {};
+  for (let key in row) d[key] = row[key];
+  return d;
+}
+
+function serializeSchema(schema: string, mgr: VegaWidgetModel): string {
+  let jsonSchema = null;
+  try {
+    jsonSchema = JSON.parse(schema);
+  } catch (err) {
+    console.log(err);
+    return schema;
+  }
+  if (
+    jsonSchema !== null &&
+    jsonSchema.data !== undefined &&
+    mgr.dynUpdates.length > 0
+  ) {
+    let vals = mgr.dynUpdates.flat();
+    if (jsonSchema.data.values != undefined) {
+      vals = jsonSchema.data.values.concat(vals);
+    }
+    if (mgr.dynUpdatesDataFrame) {
+      vals = vals.map(rowToDict);
+    }
+    jsonSchema.data = { name: mgr.dynUpdatesKey, values: vals };
+  }
+  return JSON.stringify(jsonSchema);
+}
+
 // validate the ev object and cast it to the correct type
 function checkWidgetUpdate(ev: any): WidgetUpdateMessage | null {
   if (ev.type != "update") {
@@ -39,8 +71,12 @@ export class VegaWidgetModel extends DOMWidgetModel {
       _columns: [],
     };
   }
+  dynUpdates = Array();
+  dynUpdatesKey = "";
+  dynUpdatesDataFrame = false;
   static serializers = {
     ...DOMWidgetModel.serializers,
+    _spec_source: { serialize: serializeSchema } as any,
     _df: table_serialization as any,
   };
 
@@ -63,11 +99,10 @@ export class VegaWidget extends DOMWidgetView {
     const reembed = async () => {
       const spec = JSON.parse(this.model.get("_spec_source"));
       const opt = JSON.parse(this.model.get("_opt_source") || "{}");
-
+      console.log("model: ", this.model);
       if (spec == null) {
         return;
       }
-
       try {
         const result = await vegaEmbed(this.viewElement, spec, {
           loader: { http: { credentials: "same-origin" } },
@@ -91,7 +126,7 @@ export class VegaWidget extends DOMWidgetView {
       if (result == null) {
         throw new Error("Internal error: no view attached to widget");
       }
-
+      let model = this.model as VegaWidgetModel;
       const filter = new Function(
         "datum",
         `return (${update.remove || "false"})`
@@ -99,6 +134,7 @@ export class VegaWidget extends DOMWidgetView {
       let newValues = update.insert || [];
       if (newValues === "@dataframe") {
         newValues = this.updateDataFrame();
+        model.dynUpdatesDataFrame = true;
       } else if (newValues === "@array2d") {
         newValues = this.updateArray2D();
       }
@@ -106,8 +142,25 @@ export class VegaWidget extends DOMWidgetView {
         .changeset()
         .remove(filter)
         .insert(newValues);
-
       const view = result.view.change(update.key, changeSet);
+      if (update.remove === "true") {
+        // i.e. remove all previous records
+        model.dynUpdates = Array();
+      } else if (update.remove !== "false")
+        console.log(
+          "cannot serialize complex remove expression: ",
+          update.remove
+        );
+      if (model.dynUpdatesKey === "") {
+        model.dynUpdatesKey = update.key;
+      } else if (model.dynUpdatesKey !== update.key) {
+        console.log(
+          "cannot serialize multiple datakeys: ",
+          model.dynUpdatesKey,
+          update.key
+        );
+      }
+      model.dynUpdates.push(newValues);
       if (resize) view.resize();
       await view.runAsync();
     };
