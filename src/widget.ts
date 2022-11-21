@@ -17,38 +17,25 @@ interface WidgetUpdateMessage {
   resize: boolean;
 }
 
-// required because JSON.stringify don't work well with proxy objects returned by rowProxy
-function rowToDict(row: any): any {
-  let d: any = {};
-  for (let key in row) d[key] = row[key];
-  return d;
-}
-
-function serializeSchema(schema: string, mgr: VegaWidgetModel): string {
-  let jsonSchema = null;
-  try {
-    jsonSchema = JSON.parse(schema);
-  } catch (err) {
-    console.log(err);
-    return schema;
+function serializeImgURL(imgURL: string, mgr: VegaWidgetModel): string {
+  if (mgr.viewInstance === null || mgr.viewInstance.viewElement === undefined) {
+    console.log("No view");
+    return imgURL;
   }
-  if (
-    jsonSchema !== null &&
-    jsonSchema.data !== undefined &&
-    mgr.dynUpdates.length > 0
-  ) {
-    let vals = mgr.dynUpdates.flat();
-    if (jsonSchema.data.values != undefined) {
-      vals = jsonSchema.data.values.concat(vals);
-    }
-    if (mgr.dynUpdatesDataFrame) {
-      vals = vals.map(rowToDict);
-    }
-    jsonSchema.data = { name: mgr.dynUpdatesKey, values: vals };
+  let id_ = mgr.viewInstance.viewElement.id;
+  if (id_ === "" || id_ === undefined) {
+    //hach to avoid jquery dep.
+    id_ = "VEGA_ID" + Math.random().toString().substr(2, 40);
+    mgr.viewInstance.viewElement.id = id_;
   }
-  return JSON.stringify(jsonSchema);
+  let canvas = document.querySelector("#" + id_ + " canvas");
+  if (canvas === null) {
+    console.log("no canvas");
+    return imgURL;
+  }
+  // @ts-ignore
+  return canvas.toDataURL();
 }
-
 // validate the ev object and cast it to the correct type
 function checkWidgetUpdate(ev: any): WidgetUpdateMessage | null {
   if (ev.type != "update") {
@@ -68,15 +55,14 @@ export class VegaWidgetModel extends DOMWidgetModel {
       _spec_source: "",
       _opt_source: "",
       _df: ndarray([]),
+      _img_url: "",
       _columns: [],
     };
   }
-  dynUpdates = Array();
-  dynUpdatesKey = "";
-  dynUpdatesDataFrame = false;
+  viewInstance: VegaWidget | null = null;
   static serializers = {
     ...DOMWidgetModel.serializers,
-    _spec_source: { serialize: serializeSchema } as any,
+    _img_url: { serialize: serializeImgURL } as any,
     _df: table_serialization as any,
   };
 
@@ -96,10 +82,19 @@ export class VegaWidget extends DOMWidgetView {
     this.el.appendChild(this.viewElement);
     this.errorElement.style.color = "red";
     this.el.appendChild(this.errorElement);
+    let model = this.model as VegaWidgetModel;
+    model.viewInstance = this;
     const reembed = async () => {
       const spec = JSON.parse(this.model.get("_spec_source"));
       const opt = JSON.parse(this.model.get("_opt_source") || "{}");
-      console.log("model: ", this.model);
+      const imgURL = this.model.get("_img_url");
+      if (imgURL !== "" && imgURL !== "null") {
+        let imgElement = document.createElement("img");
+        imgElement.src = imgURL;
+        this.viewElement.appendChild(imgElement);
+        this.model.set("_img_url", "null");
+        return;
+      }
       if (spec == null) {
         return;
       }
@@ -126,7 +121,6 @@ export class VegaWidget extends DOMWidgetView {
       if (result == null) {
         throw new Error("Internal error: no view attached to widget");
       }
-      let model = this.model as VegaWidgetModel;
       const filter = new Function(
         "datum",
         `return (${update.remove || "false"})`
@@ -134,7 +128,6 @@ export class VegaWidget extends DOMWidgetView {
       let newValues = update.insert || [];
       if (newValues === "@dataframe") {
         newValues = this.updateDataFrame();
-        model.dynUpdatesDataFrame = true;
       } else if (newValues === "@array2d") {
         newValues = this.updateArray2D();
       }
@@ -143,24 +136,6 @@ export class VegaWidget extends DOMWidgetView {
         .remove(filter)
         .insert(newValues);
       const view = result.view.change(update.key, changeSet);
-      if (update.remove === "true") {
-        // i.e. remove all previous records
-        model.dynUpdates = Array();
-      } else if (update.remove !== "false")
-        console.log(
-          "cannot serialize complex remove expression: ",
-          update.remove
-        );
-      if (model.dynUpdatesKey === "") {
-        model.dynUpdatesKey = update.key;
-      } else if (model.dynUpdatesKey !== update.key) {
-        console.log(
-          "cannot serialize multiple datakeys: ",
-          model.dynUpdatesKey,
-          update.key
-        );
-      }
-      model.dynUpdates.push(newValues);
       if (resize) view.resize();
       await view.runAsync();
     };
