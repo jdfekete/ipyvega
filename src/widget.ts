@@ -17,6 +17,12 @@ interface WidgetUpdateMessage {
   resize: boolean;
 }
 
+// Serialize the widget as an image instead of the whole
+// dataset that can be arbitrarily large.
+// In a notebook, this makes no difference because the actual serialized
+// model is only used when viewing the notebook before running any cell.
+// If used as a standalone widget, the serialization will only return an
+// image.
 function serializeImgURL(imgURL: string, mgr: VegaWidgetModel): string {
   if (mgr.viewInstance === null || mgr.viewInstance.viewElement === undefined) {
     console.log("No view");
@@ -36,6 +42,7 @@ function serializeImgURL(imgURL: string, mgr: VegaWidgetModel): string {
   // @ts-ignore
   return canvas.toDataURL();
 }
+
 // validate the ev object and cast it to the correct type
 function checkWidgetUpdate(ev: any): WidgetUpdateMessage | null {
   if (ev.type != "update") {
