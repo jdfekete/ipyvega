@@ -15,7 +15,7 @@ from jupyter_packaging import (
 here = osp.dirname(osp.abspath(__file__))
 
 npm_package_name = 'jupyter-vega'
-python_package_name = 'ipytablewidgets'
+python_package_name = 'vega'
 # version = get_version(pjoin(python_package_name, '_version.py'))
 package_json = pjoin(here, '', 'package.json')
 with open(package_json) as f:
