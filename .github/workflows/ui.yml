@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - pandas-15
   pull_request:
     branches:
       - master
